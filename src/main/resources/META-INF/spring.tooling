@@ -1,0 +1,3 @@
+http\://system.mp-objects.com/schemas/spring/util@name=MPO util Namespace
+http\://system.mp-objects.com/schemas/spring/util@prefix=mpo
+#http\://system.mp-objects.com/schemas/spring/util@icon=org/springframework/beans/factory/xml/spring-beans.gif
