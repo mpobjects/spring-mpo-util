@@ -3,13 +3,17 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.mpobjects</groupId>
-		<artifactId>mpo-base</artifactId>
-		<version>1.5.4</version>
+		<artifactId>mpo-oss-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<groupId>com.mpobjects.spring</groupId>
 	<artifactId>spring-mpo-util</artifactId>
 	<version>3.0.0-SNAPSHOT</version>
 	<name>Spring Framework MPO Utilities</name>
+	<organization>
+		<name>MP Objects</name>
+		<url>http://www.mp-objects.com</url>
+	</organization>
 	<properties>
 		<spring-version>3.2.18.RELEASE</spring-version>
 	</properties>
@@ -25,8 +29,4 @@
 			<version>${spring-version}</version>
 		</dependency>
 	</dependencies>
-	<organization>
-		<name>MP Objects</name>
-		<url>http://www.mp-objects.com</url>
-	</organization>
 </project>

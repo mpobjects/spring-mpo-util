@@ -19,6 +19,7 @@ package com.mpobjects.spring.util;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -95,8 +96,8 @@ public class FilteredResourcesFactoryBean extends AbstractFactoryBean<Resource[]
 
 		Collections.sort(result, new Comparator<Resource>() {
 			@Override
-			public int compare(Resource r1, Resource r2) {
-				return indexOf(r1, ordering) - indexOf(r2, ordering);
+			public int compare(Resource aR1, Resource aR2) {
+				return indexOf(aR1, ordering) - indexOf(aR2, ordering);
 			}
 		});
 		return result.toArray(new Resource[result.size()]);
@@ -110,6 +111,7 @@ public class FilteredResourcesFactoryBean extends AbstractFactoryBean<Resource[]
 	 * Return the group index.
 	 *
 	 * @param aResource
+	 *            c
 	 * @param aGroups
 	 * @return The position in the list, or {@value #NOT_FOUND} if it was not present.
 	 */
@@ -141,7 +143,7 @@ public class FilteredResourcesFactoryBean extends AbstractFactoryBean<Resource[]
 		}
 
 		List<String> result = new ArrayList<>();
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				if (!StringUtils.hasText(line) || line.startsWith("#")) {

@@ -21,33 +21,33 @@ public class MpoUtilNamespaceHandlerSupport extends NamespaceHandlerSupport {
 
 	public static class ResourcesBeanDefinitionParser extends AbstractSimpleBeanDefinitionParser {
 		@Override
-		protected void doParse(Element element, ParserContext parserContext, BeanDefinitionBuilder builder) {
-			List parsedList = parserContext.getDelegate().parseListElement(element, builder.getRawBeanDefinition());
-			builder.addPropertyValue("locations", parsedList);
+		protected void doParse(Element aElement, ParserContext aParserContext, BeanDefinitionBuilder aBuilder) {
+			List parsedList = aParserContext.getDelegate().parseListElement(aElement, aBuilder.getRawBeanDefinition());
+			aBuilder.addPropertyValue("locations", parsedList);
 
-			String groups = element.getAttribute("groups");
+			String groups = aElement.getAttribute("groups");
 			if (StringUtils.hasText(groups)) {
-				builder.addPropertyValue("groups", groups);
+				aBuilder.addPropertyValue("groups", groups);
 			}
 
-			String pattern = element.getAttribute("pattern");
+			String pattern = aElement.getAttribute("pattern");
 			if (StringUtils.hasText(pattern)) {
-				builder.addPropertyValue("pattern", pattern);
+				aBuilder.addPropertyValue("pattern", pattern);
 			}
 
-			String groupIndex = element.getAttribute("group-index");
+			String groupIndex = aElement.getAttribute("group-index");
 			if (StringUtils.hasText(groupIndex)) {
-				builder.addPropertyValue("groupIndex", groupIndex);
+				aBuilder.addPropertyValue("groupIndex", groupIndex);
 			}
 
-			String scope = element.getAttribute("scope");
+			String scope = aElement.getAttribute("scope");
 			if (StringUtils.hasLength(scope)) {
-				builder.setScope(scope);
+				aBuilder.setScope(scope);
 			}
 		}
 
 		@Override
-		protected Class getBeanClass(Element element) {
+		protected Class getBeanClass(Element aElement) {
 			return FilteredResourcesFactoryBean.class;
 		}
 	}
