@@ -1,6 +1,6 @@
-dist: trusty
+#dist: trusty
 language: java
-jdk: openjdk7
+jdk: openjdk8
 branches:
   only:
   - master
