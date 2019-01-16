@@ -10,13 +10,41 @@
 	<artifactId>spring-mpo-util</artifactId>
 	<version>3.0.0-SNAPSHOT</version>
 	<name>Spring Framework MPO Utilities</name>
+	<inceptionYear>2019</inceptionYear>
+	<url>https://github.com/mpobjects/spring-mpo-util</url>
+
 	<organization>
 		<name>MP Objects</name>
 		<url>http://www.mp-objects.com</url>
 	</organization>
+
+	<developers>
+		<developer>
+			<name>Michiel Hendriks</name>
+			<email>michiel.hendriks@mp-objects.com</email>
+			<organization>MP Objects</organization>
+			<organizationUrl>http://www.mp-objects.com</organizationUrl>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	
+	<scm>
+		<connection>scm:git:https://github.com/mpobjects/spring-mpo-util.git</connection>
+		<developerConnection>scm:git:https://github.com/mpobjects/spring-mpo-util.git</developerConnection>
+		<url>https://github.com/mpobjects/spring-mpo-util.git</url>
+	</scm>
+
 	<properties>
 		<spring-version>3.2.18.RELEASE</spring-version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -29,4 +57,14 @@
 			<version>${spring-version}</version>
 		</dependency>
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>ossrh-snapshots</id>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</repository>
+	</repositories>
 </project>
