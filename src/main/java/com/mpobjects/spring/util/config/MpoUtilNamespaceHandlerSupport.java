@@ -30,6 +30,15 @@ public class MpoUtilNamespaceHandlerSupport extends NamespaceHandlerSupport {
 				aBuilder.addPropertyValue("groups", groups);
 			}
 
+			String groupsRef = aElement.getAttribute("groups-ref");
+			if (StringUtils.hasText(groupsRef)) {
+				aBuilder.addPropertyValue("groupsRef", groupsRef);
+			}
+
+			if (!StringUtils.isEmpty(groups) && !StringUtils.isEmpty(groupsRef)) {
+				aParserContext.getReaderContext().error("'groups' and 'groups-ref' cannot both be set.", aElement);
+			}
+
 			String pattern = aElement.getAttribute("pattern");
 			if (StringUtils.hasText(pattern)) {
 				aBuilder.addPropertyValue("pattern", pattern);

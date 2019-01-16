@@ -36,6 +36,7 @@
 						</xsd:annotation>
 					</xsd:attribute>
 					<xsd:attribute name="groups" type="xsd:string"></xsd:attribute>
+					<xsd:attribute name="groups-ref" type="xsd:string"></xsd:attribute>
 					<xsd:attribute name="pattern" type="xsd:string"></xsd:attribute>
 					<xsd:attribute name="group-index">
 						<xsd:simpleType>

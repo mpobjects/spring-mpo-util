@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
@@ -40,13 +42,17 @@ import org.springframework.util.StringUtils;
 /**
  * Filters (and sorts) resources according to a group specification.
  */
-public class FilteredResourcesFactoryBean extends AbstractFactoryBean<Resource[]> implements ResourceLoaderAware {
+public class FilteredResourcesFactoryBean extends AbstractFactoryBean<Resource[]> implements ResourceLoaderAware, BeanFactoryAware {
 
 	private static final int NOT_FOUND = Integer.MAX_VALUE;
+
+	private BeanFactory beanFactory;
 
 	private int groupIndex = 1;
 
 	private String groups;
+
+	private String groupsRef;
 
 	private List<String> locations;
 
@@ -59,12 +65,50 @@ public class FilteredResourcesFactoryBean extends AbstractFactoryBean<Resource[]
 	}
 
 	@Override
+	public BeanFactory getBeanFactory() {
+		return beanFactory;
+	}
+
+	public int getGroupIndex() {
+		return groupIndex;
+	}
+
+	public String getGroups() {
+		return groups;
+	}
+
+	public String getGroupsRef() {
+		return groupsRef;
+	}
+
+	public List<String> getLocations() {
+		return locations;
+	}
+
+	@Override
 	public Class<? extends Resource[]> getObjectType() {
 		return Resource[].class;
 	}
 
+	public Pattern getPattern() {
+		return pattern;
+	}
+
+	@Override
+	public void setBeanFactory(BeanFactory aBeanFactory) {
+		beanFactory = aBeanFactory;
+	}
+
+	public void setGroupIndex(int aGroupIndex) {
+		groupIndex = aGroupIndex;
+	}
+
 	public void setGroups(String aGroups) {
 		groups = aGroups;
+	}
+
+	public void setGroupsRef(String aGroupsRef) {
+		groupsRef = aGroupsRef;
 	}
 
 	public void setLocations(List<String> aLocations) {
@@ -111,9 +155,11 @@ public class FilteredResourcesFactoryBean extends AbstractFactoryBean<Resource[]
 	 * Return the group index.
 	 *
 	 * @param aResource
-	 *            c
+	 *            The resource to get the group index for
 	 * @param aGroups
-	 * @return The position in the list, or {@value #NOT_FOUND} if it was not present.
+	 *            Ordered list of groups to allow.
+	 * @return The position in the list, or {@value #NOT_FOUND} if it was not present. Returns <code>-1</code> if the
+	 *         group list is empty or pattern is empty.
 	 */
 	protected int indexOf(Resource aResource, List<String> aGroups) {
 		if (pattern == null || aGroups.isEmpty()) {
@@ -134,12 +180,20 @@ public class FilteredResourcesFactoryBean extends AbstractFactoryBean<Resource[]
 	}
 
 	protected List<String> loadGroupOrder() {
+		if (groupsRef != null) {
+			return loadGroupsReference();
+		} else {
+			return loadGroupsFromResource();
+		}
+	}
+
+	protected List<String> loadGroupsFromResource() {
 		if (groups == null) {
 			return Collections.emptyList();
 		}
 		Resource resource = resourcePatternResolver.getResource(groups);
 		if (resource == null) {
-			throw new IllegalStateException(String.format("Failed to resolve resource %s", groups));
+			throw new IllegalStateException(String.format("Failed to resolve resource '%s'", groups));
 		}
 
 		List<String> result = new ArrayList<>();
@@ -153,6 +207,14 @@ public class FilteredResourcesFactoryBean extends AbstractFactoryBean<Resource[]
 			}
 		} catch (IOException e) {
 			throw new IllegalStateException(String.format("Failed to load resource %s", groups), e);
+		}
+		return result;
+	}
+
+	protected List<String> loadGroupsReference() {
+		List result = beanFactory.getBean(groupsRef, List.class);
+		if (result == null) {
+			throw new IllegalStateException(String.format("No List bean found with name '%s'", groupsRef));
 		}
 		return result;
 	}
