@@ -18,6 +18,7 @@ package com.mpobjects.spring.util;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,6 +44,11 @@ import org.springframework.util.StringUtils;
  */
 public class FilteredResourcesFactoryBean extends AbstractFactoryBean<Resource[]> implements ResourceLoaderAware, BeanFactoryAware {
 
+	public enum ResourceName {
+		FILENAME,
+		URI
+	}
+
 	private static final int NOT_FOUND = Integer.MAX_VALUE;
 
 	private BeanFactory beanFactory;
@@ -56,6 +62,8 @@ public class FilteredResourcesFactoryBean extends AbstractFactoryBean<Resource[]
 	private List<String> locations;
 
 	private Pattern pattern;
+
+	private ResourceName resourceName = ResourceName.FILENAME;
 
 	private ResourcePatternResolver resourcePatternResolver;
 
@@ -93,6 +101,10 @@ public class FilteredResourcesFactoryBean extends AbstractFactoryBean<Resource[]
 		return pattern;
 	}
 
+	public ResourceName getResourceName() {
+		return resourceName;
+	}
+
 	@Override
 	public void setBeanFactory(BeanFactory aBeanFactory) {
 		beanFactory = aBeanFactory;
@@ -123,6 +135,13 @@ public class FilteredResourcesFactoryBean extends AbstractFactoryBean<Resource[]
 		resourcePatternResolver = ResourcePatternUtils.getResourcePatternResolver(aResourceLoader);
 	}
 
+	public void setResourceName(ResourceName aResourceName) {
+		resourceName = aResourceName;
+		if (resourceName == null) {
+			resourceName = ResourceName.FILENAME;
+		}
+	}
+
 	@Override
 	protected Resource[] createInstance() throws Exception {
 		final List<String> ordering = loadGroupOrder();
@@ -147,7 +166,24 @@ public class FilteredResourcesFactoryBean extends AbstractFactoryBean<Resource[]
 	}
 
 	protected String getResourceName(Resource aResource) {
-		return aResource.getFilename();
+		switch (resourceName) {
+			case URI:
+				URI uri;
+				try {
+					uri = aResource.getURI();
+				} catch (IOException e) {
+					uri = null;
+				}
+				if (uri == null) {
+					return "";
+				} else {
+					return uri.toString();
+				}
+			case FILENAME:
+				// fall through
+			default:
+				return aResource.getFilename();
+		}
 	}
 
 	/**
@@ -165,6 +201,9 @@ public class FilteredResourcesFactoryBean extends AbstractFactoryBean<Resource[]
 			return -1;
 		}
 		String name = getResourceName(aResource);
+		if (name == null) {
+			return NOT_FOUND;
+		}
 		Matcher m = pattern.matcher(name);
 		if (!m.matches() || m.groupCount() < groupIndex) {
 			return NOT_FOUND;

@@ -35,13 +35,36 @@
 							]]></xsd:documentation>
 						</xsd:annotation>
 					</xsd:attribute>
-					<xsd:attribute name="groups" type="xsd:string"></xsd:attribute>
-					<xsd:attribute name="groups-ref" type="xsd:string"></xsd:attribute>
-					<xsd:attribute name="pattern" type="xsd:string"></xsd:attribute>
+					<xsd:attribute name="groups" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Spring resource uri to a file containing the group list.</xsd:documentation>
+						</xsd:annotation></xsd:attribute>
+					<xsd:attribute name="groups-ref" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Reference to a String list bean.</xsd:documentation>
+						</xsd:annotation></xsd:attribute>
+					<xsd:attribute name="pattern" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Regular expression used to extract the group value from the resource name.</xsd:documentation>
+						</xsd:annotation></xsd:attribute>
 					<xsd:attribute name="group-index">
-						<xsd:simpleType>
+                        <xsd:annotation>
+                        	<xsd:documentation>Group index of the pattern which contains the group value. Defaults to 1.</xsd:documentation>
+                        </xsd:annotation>
+                        <xsd:simpleType>
 							<xsd:restriction base="xsd:int">
 								<xsd:minExclusive value="1"></xsd:minExclusive>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+					<xsd:attribute name="resource-name" use="optional" default="filename">
+                        <xsd:annotation>
+                        	<xsd:documentation>Defines the file of the resource to use as name.</xsd:documentation>
+                        </xsd:annotation>
+                        <xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:enumeration value="filename"></xsd:enumeration>
+								<xsd:enumeration value="uri"></xsd:enumeration>
 							</xsd:restriction>
 						</xsd:simpleType>
 					</xsd:attribute>

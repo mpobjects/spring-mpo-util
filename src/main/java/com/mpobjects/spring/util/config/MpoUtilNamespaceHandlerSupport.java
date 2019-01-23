@@ -27,7 +27,7 @@ import org.w3c.dom.Element;
 import com.mpobjects.spring.util.FilteredResourcesFactoryBean;
 
 /**
- *
+ * Handles the http://system.mp-objects.com/schemas/spring/util namespace.
  */
 public class MpoUtilNamespaceHandlerSupport extends NamespaceHandlerSupport {
 
@@ -59,6 +59,11 @@ public class MpoUtilNamespaceHandlerSupport extends NamespaceHandlerSupport {
 			String groupIndex = aElement.getAttribute("group-index");
 			if (StringUtils.hasText(groupIndex)) {
 				aBuilder.addPropertyValue("groupIndex", groupIndex);
+			}
+
+			String resourceName = aElement.getAttribute("resource-name");
+			if (StringUtils.hasText(resourceName)) {
+				aBuilder.addPropertyValue("resourceName", resourceName.toUpperCase());
 			}
 
 			String scope = aElement.getAttribute("scope");
